@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.18</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>ec.sri.ats</groupId>
+    <artifactId>ats-validator</artifactId>
+    <version>1.0.0</version>
+    <name>ATS Validator Service</name>
+    <description>Servicio intermediario para validar ATS del SRI Ecuador</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Boot Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- JARs del SRI - Validacion ATS -->
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>rig-ats-validacion</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>rig-ats-persistencia</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>rig-ats-persistencia-api</artifactId>
+            <version>2.23.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>rig-anexos-persistencia</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>rig-anexos-validacion</artifactId>
+            <version>4.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>api-anexos</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!-- Catálogos SRI -->
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>catalogos-api</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>catalogos-carga</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>catalogos-impl</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>ec.gob.sri.anexo</groupId>
+            <artifactId>catalogos-modelo</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+
+        <!-- Base de datos embebida HSQLDB (catálogos SRI) -->
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.2.9</version>
+        </dependency>
+
+        <!-- Saxon HE - Procesador XSLT del SRI -->
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <version>9.7.0-5</version>
+        </dependency>
+
+        <!-- Dependencias comunes -->
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>14.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.8.1</version>
+        </dependency>
+        <!-- log4j como puente para las libs del SRI (no reemplaza logback de Spring) -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.14</version>
+        </dependency>
+        <!-- slf4j-jdk14 excluido: Spring Boot usa logback; las libs SRI usan log4j -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.0.2.GA</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-core</artifactId>
+            <version>2.5.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

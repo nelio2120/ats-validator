@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache name="catalogos_cache">
+	<diskStore path="java.io.tmpdir" />
+
+	<defaultCache maxElementsInMemory="10000"
+		maxElementsOnDisk="10000000" eternal="false" timeToIdleSeconds="600"
+		timeToLiveSeconds="3600" overflowToDisk="false" diskSpoolBufferSizeMB="30"
+		diskPersistent="false" diskExpiryThreadIntervalSeconds="120"
+		memoryStoreEvictionPolicy="LRU">
+	</defaultCache>
+
+	<cache name="catalogo_anexo" maxElementsInMemory="10000"
+		maxElementsOnDisk="4000" eternal="false" timeToIdleSeconds="86400"
+		timeToLiveSeconds="86400" overflowToDisk="false"
+		diskSpoolBufferSizeMB="30" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="900" memoryStoreEvictionPolicy="LRU">
+	</cache>
+
+	<cache name="catalogos" maxElementsInMemory="10000"
+		maxElementsOnDisk="4000" eternal="false" timeToIdleSeconds="86400"
+		timeToLiveSeconds="86400" overflowToDisk="false"
+		diskSpoolBufferSizeMB="30" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="900" memoryStoreEvictionPolicy="LRU">
+	</cache>
+
+	<cache name="catalogosUbicacion" maxElementsInMemory="10000"
+		maxElementsOnDisk="4000" eternal="false" timeToIdleSeconds="86400"
+		timeToLiveSeconds="86400" overflowToDisk="false"
+		diskSpoolBufferSizeMB="30" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="900" memoryStoreEvictionPolicy="LRU">
+	</cache>
+
+	<cache name="catalogosPaises" maxElementsInMemory="10000"
+		maxElementsOnDisk="4000" eternal="false" timeToIdleSeconds="86400"
+		timeToLiveSeconds="86400" overflowToDisk="false"
+		diskSpoolBufferSizeMB="30" diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="900" memoryStoreEvictionPolicy="LRU">
+	</cache>
+	<cache name="catalogosATS" maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="86400" timeToLiveSeconds="86400" overflowToDisk="false"
+		memoryStoreEvictionPolicy="LRU" />
+		
+	<!-- REBEFICS Catalogo de Figuras Juridicas -->
+	<cache name="catalogoFiguraJuridica" maxEntriesLocalHeap="10000"
+		eternal="false" timeToIdleSeconds="3600" timeToLiveSeconds="86400"
+		overflowToDisk="false" memoryStoreEvictionPolicy="LRU" />
+		
+		<!-- drvp190711   16-09-2015 
+         Poner parametrizacion en la instancia   \..\jboss-as\server\anexos\conf\catalogos 
+         se actualiza cada 24 HORAS --> 
+    <cache name="catalogosMonedas" maxEntriesLocalHeap="10000"
+        eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400"
+        overflowToDisk="false" memoryStoreEvictionPolicy="LRU" />           
+    <cache name="catalogosRTF" maxEntriesLocalHeap="10000"
+        eternal="false" timeToIdleSeconds="86400" timeToLiveSeconds="86400"
+        overflowToDisk="false" memoryStoreEvictionPolicy="LRU" />   
+</ehcache>

@@ -1,0 +1,17 @@
+# Compilados Maven
+target/
+
+# IDE
+.idea/
+.eclipse/
+*.iml
+.settings/
+.project
+.classpath
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
