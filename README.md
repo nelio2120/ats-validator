@@ -52,6 +52,168 @@ ats-validator/
 
 ---
 
+## Opción recomendada: Contenedor (Docker / Podman)
+
+No requiere instalar Java, Maven ni ninguna dependencia en el host. Solo necesitas una de estas herramientas:
+
+- **Docker**: `docker --version` (mín. 20.10)
+- **Podman**: `podman --version` (mín. 3.0)
+
+> Todos los comandos funcionan con ambas herramientas. Cambia `docker` por `podman` según corresponda.
+
+### Inicio rápido con Docker Compose
+
+```bash
+# Con Docker
+docker compose up -d --build
+
+# Con Podman
+podman-compose up -d --build
+```
+
+Verificar que está funcionando:
+
+```bash
+curl http://localhost:8080/api/ats/health
+```
+
+Respuesta esperada:
+```json
+{"status":"UP","servicio":"ATS Validator SRI Ecuador"}
+```
+
+Ver logs:
+
+```bash
+docker compose logs -f
+```
+
+Detener:
+
+```bash
+docker compose down
+```
+
+### Comandos manuales (sin Compose)
+
+**1. Construir la imagen**
+
+```bash
+docker build -t ats-validator:latest -f Containerfile .
+```
+
+Tiempo estimado: 3–5 minutos en la primera construcción (descarga dependencias Maven).
+
+**2. Ejecutar el contenedor**
+
+```bash
+docker run -d \
+  --name ats-validator \
+  -p 8080:8080 \
+  -e JAVA_OPTS="-Xms256m -Xmx1024m" \
+  --restart unless-stopped \
+  ats-validator:latest
+```
+
+**3. Ver logs**
+
+```bash
+docker logs -f ats-validator
+```
+
+Salida esperada al arrancar:
+
+```
+INFO  DatabaseConfig       - Catálogos SRI cargados desde: /tmp/dimm-catalogs-xxx
+INFO  AtsValidationService - Catálogos SRI inicializados en caché: true
+INFO  AtsValidatorApplication - Started AtsValidatorApplication in 2.3 seconds
+```
+
+**4. Detener y eliminar**
+
+```bash
+docker stop ats-validator && docker rm ats-validator
+```
+
+### Configuración avanzada del contenedor
+
+**Cambiar el puerto:**
+
+```bash
+docker run -d --name ats-validator -p 8085:8080 ats-validator:latest
+```
+
+**Ajustar memoria JVM:**
+
+```bash
+docker run -d --name ats-validator -p 8080:8080 \
+  -e JAVA_OPTS="-Xms512m -Xmx2048m" ats-validator:latest
+```
+
+**Limitar recursos:**
+
+```bash
+docker run -d --name ats-validator -p 8080:8080 \
+  --memory="1536m" --cpus="2" ats-validator:latest
+```
+
+**Modo debug (puerto 5005):**
+
+```bash
+docker run -d --name ats-validator -p 8080:8080 -p 5005:5005 \
+  -e JAVA_OPTS="-Xms256m -Xmx1024m -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" \
+  ats-validator:latest
+```
+
+**Reconstruir sin caché:**
+
+```bash
+docker build --no-cache -t ats-validator:latest -f Containerfile .
+```
+
+### Podman: ejecutar como servicio systemd
+
+```bash
+podman run -d --name ats-validator -p 8080:8080 ats-validator:latest
+
+podman generate systemd --new --files --name ats-validator
+
+mkdir -p ~/.config/systemd/user
+mv container-ats-validator.service ~/.config/systemd/user/
+
+systemctl --user enable container-ats-validator.service
+systemctl --user start container-ats-validator.service
+```
+
+### Integración con Odoo en contenedor
+
+Si Odoo también corre en Docker/Podman, usa una red compartida:
+
+```yaml
+# compose.yml
+networks:
+  app-network:
+
+services:
+  ats-validator:
+    build: .
+    networks:
+      - app-network
+    ports:
+      - "8080:8080"
+
+  odoo:
+    image: odoo:19
+    networks:
+      - app-network
+    environment:
+      - ATS_VALIDATOR_URL=http://ats-validator:8080
+```
+
+Desde Odoo accede como: `http://ats-validator:8080`
+
+---
+
 ## Paso 1 — Preparación del entorno (solo la primera vez)
 
 El servicio necesita un archivo de configuración de caché en el directorio del usuario. Crear la carpeta y copiar el archivo:

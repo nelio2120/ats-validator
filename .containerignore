@@ -1,0 +1,23 @@
+# Git
+.git
+.gitignore
+
+# IDE
+.classpath
+.project
+.settings
+.idea
+*.iml
+.vscode
+
+# Build artifacts (se recompila dentro del contenedor)
+target/
+*.log
+
+# Documentación
+README.md
+*.md
+
+# Otros
+.DS_Store
+mempalace.yaml
