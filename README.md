@@ -263,6 +263,39 @@ java -jar target/ats-validator-1.0.0.jar \
 
 ---
 
+## Despliegue con Docker
+
+El servicio está publicado en producción en:
+
+**https://validator.ats.erp360app.com**
+
+```
+GET  https://validator.ats.erp360app.com/api/ats/health
+POST https://validator.ats.erp360app.com/api/ats/validar
+```
+
+### Levantar con docker compose
+
+El repo incluye un `Dockerfile` (build multi-stage: Maven instala las librerías del SRI desde
+`libs/` y compila; la imagen final corre sobre `eclipse-temurin:11-jre`) y un
+`docker-compose.yml`:
+
+```bash
+docker compose build
+docker compose up -d
+```
+
+El servicio queda expuesto en `127.0.0.1:8090` (mapeado a `8080` dentro del contenedor). En el
+servidor de producción, un nginx hace de proxy reverso con TLS (Let's Encrypt) hacia ese puerto
+para servir el dominio `validator.ats.erp360app.com`.
+
+> Nota: la dependencia `hibernate-validator 4.0.2.GA` se removió de `pom.xml` — entraba en
+> conflicto con la versión de `validation-api` que impone el padre de Spring Boot
+> (`spring-boot-starter-parent`) y rompía el arranque. El código propio no usa Bean Validation,
+> así que no afecta la funcionalidad.
+
+---
+
 ## Notas técnicas
 
 - El JAR es **autocontenido** — incluye Tomcat embebido, los catálogos HSQLDB y todas las
