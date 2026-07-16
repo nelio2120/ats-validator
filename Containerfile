@@ -77,6 +77,12 @@ LABEL maintainer="ATS Validator" \
       description="REST service for SRI Ecuador ATS validation" \
       version="1.0.0"
 
+# curl is required by the HEALTHCHECK below; the eclipse-temurin base image
+# does not include it
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create a non-root user for security
 RUN groupadd -r atsvalidator && \
     useradd -r -g atsvalidator -m -d /app -s /bin/bash atsvalidator

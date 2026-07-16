@@ -24,7 +24,13 @@ if command -v docker &> /dev/null; then
     COMPOSE_CMD="docker compose"
 elif command -v podman &> /dev/null; then
     CONTAINER_CMD="podman"
-    COMPOSE_CMD="podman-compose"
+    if command -v podman-compose &> /dev/null; then
+        COMPOSE_CMD="podman-compose"
+    elif podman compose version &> /dev/null; then
+        COMPOSE_CMD="podman compose"
+    else
+        COMPOSE_CMD=""
+    fi
 else
     echo -e "${RED}Error: Ni Docker ni Podman están instalados${NC}"
     exit 1
@@ -173,19 +179,23 @@ test_api() {
     echo -e "  GET  http://localhost:${PORT}/api/ats/health"
     echo -e "  POST http://localhost:${PORT}/api/ats/validar"
     echo ""
-    echo -e "${BLUE}Ejemplo de uso:${NC}"
-    echo -e "  curl -X POST http://localhost:${PORT}/api/ats/validar \\"
-    echo -e "       -H \"Content-Type: application/xml\" \\"
-    echo -e "       --data-binary @mi-archivo-ats.xml"
 }
 
 compose_up() {
+    if [ -z "$COMPOSE_CMD" ]; then
+        echo -e "${RED}Error: no se encontró 'podman-compose' ni 'podman compose'. Instala uno de los dos.${NC}"
+        exit 1
+    fi
     echo -e "${BLUE}Iniciando con compose...${NC}"
     $COMPOSE_CMD up -d --build
     echo -e "${GREEN}✓ Servicio iniciado con compose${NC}"
 }
 
 compose_down() {
+    if [ -z "$COMPOSE_CMD" ]; then
+        echo -e "${RED}Error: no se encontró 'podman-compose' ni 'podman compose'. Instala uno de los dos.${NC}"
+        exit 1
+    fi
     echo -e "${BLUE}Deteniendo con compose...${NC}"
     $COMPOSE_CMD down
     echo -e "${GREEN}✓ Servicio detenido con compose${NC}"
