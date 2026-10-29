@@ -27,19 +27,19 @@ COPY libs/ ./libs/
 #   - validation-api-1.0.0.GA       -> replaced by jakarta.validation 2.x
 #   - slf4j-*                       -> conflict with logback-classic
 RUN for jar in \
-      libs/rig-ats-validacion-2.23.0.jar \
-      libs/rig-ats-persistencia-2.23.0.jar \
-      libs/rig-ats-persistencia-api-2.23.0.jar \
+      libs/rig-ats-validacion-2.25.0-SNAPSHOT.jar \
+      libs/rig-ats-persistencia-2.25.0-SNAPSHOT.jar \
+      libs/rig-ats-persistencia-api-2.25.0-SNAPSHOT.jar \
       libs/rig-anexos-persistencia-1.0.0.jar \
       libs/rig-anexos-validacion-4.12.0.jar \
       libs/api-anexos-1.0.0.jar \
-      libs/catalogos-api-3.6.0.jar \
-      libs/catalogos-carga-3.6.0.jar \
-      libs/catalogos-impl-3.6.0.jar \
-      libs/catalogos-modelo-3.6.0.jar; \
+      libs/catalogos-api-3.7.0-SNAPSHOT.jar \
+      libs/catalogos-carga-3.7.0-SNAPSHOT.jar \
+      libs/catalogos-impl-3.7.0-SNAPSHOT.jar \
+      libs/catalogos-modelo-3.7.0-SNAPSHOT.jar; \
     do \
       nombre=$(basename "$jar" .jar); \
-      version=$(echo "$nombre" | grep -oP '\d+\.\d+(\.\d+)?$'); \
+      version=$(echo "$nombre" | grep -oP '\d+\.\d+(\.\d+)?(-SNAPSHOT)?$'); \
       artifactId=$(echo "$nombre" | sed "s/-${version}//"); \
       echo "Installing SRI jar: ec.gob.sri.anexo:${artifactId}:${version}"; \
       mvn install:install-file \

@@ -12,15 +12,11 @@ services:
       - JAVA_OPTS=${JAVA_OPTS:--Xms256m -Xmx1024m}
       # Puerto del servidor (opcional, por defecto 8080)
       - SERVER_PORT=${SERVER_PORT:-8080}
-    # Límites de recursos (opcional, recomendado para producción)
-    deploy:
-      resources:
-        limits:
-          cpus: '${CPU_LIMIT:-2}'
-          memory: ${MEMORY_LIMIT:-1536M}
-        reservations:
-          cpus: '0.5'
-          memory: ${MEMORY_RESERVATION:-512M}
+    # Límites de recursos (claves top-level: se aplican sin necesitar Swarm,
+    # a diferencia de deploy.resources, que Compose ignora fuera de Swarm mode)
+    cpus: ${CPU_LIMIT:-2}
+    mem_limit: ${MEMORY_LIMIT:-1536M}
+    mem_reservation: ${MEMORY_RESERVATION:-512M}
     # Reinicio automático
     restart: unless-stopped
     # Health check

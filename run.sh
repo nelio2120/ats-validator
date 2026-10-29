@@ -21,7 +21,13 @@ PORT="${PORT:-8080}"
 # Detectar Docker o Podman
 if command -v docker &> /dev/null; then
     CONTAINER_CMD="docker"
-    COMPOSE_CMD="docker compose"
+    if docker compose version &> /dev/null; then
+        COMPOSE_CMD="docker compose"
+    elif command -v docker-compose &> /dev/null; then
+        COMPOSE_CMD="docker-compose"
+    else
+        COMPOSE_CMD=""
+    fi
 elif command -v podman &> /dev/null; then
     CONTAINER_CMD="podman"
     if command -v podman-compose &> /dev/null; then
@@ -183,7 +189,7 @@ test_api() {
 
 compose_up() {
     if [ -z "$COMPOSE_CMD" ]; then
-        echo -e "${RED}Error: no se encontró 'podman-compose' ni 'podman compose'. Instala uno de los dos.${NC}"
+        echo -e "${RED}Error: no se encontró un comando de compose compatible con ${CONTAINER_CMD} ('docker compose', 'docker-compose', 'podman-compose' o 'podman compose'). Instala uno de los disponibles para tu motor.${NC}"
         exit 1
     fi
     echo -e "${BLUE}Iniciando con compose...${NC}"
@@ -193,7 +199,7 @@ compose_up() {
 
 compose_down() {
     if [ -z "$COMPOSE_CMD" ]; then
-        echo -e "${RED}Error: no se encontró 'podman-compose' ni 'podman compose'. Instala uno de los dos.${NC}"
+        echo -e "${RED}Error: no se encontró un comando de compose compatible con ${CONTAINER_CMD} ('docker compose', 'docker-compose', 'podman-compose' o 'podman compose'). Instala uno de los disponibles para tu motor.${NC}"
         exit 1
     fi
     echo -e "${BLUE}Deteniendo con compose...${NC}"
